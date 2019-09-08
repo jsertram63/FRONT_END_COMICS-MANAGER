@@ -14,16 +14,25 @@
       <th scope="row">{{i+1}}</th>
       <td>{{com.category.name}}</td>
       <td>{{com.title}}</td>
-      <td>{{com.description}}</td>
+      <td>{{com.description}} {{com.id}}</td>
       <td>
              <div class="card__actions">
+              <!-- <button v-on:click="goDetails(com.id)"> Details </button> 
+              <h6 @click="goDetails()"> Details </h6> !-->
            
+                <router-link  :to="{name:'details', params: {comicId:com.id}} " tag="button">Details</router-link>    
+                <router-view></router-view>
              </div>
+             
       </td>
     </tr>
+    
   </tbody>
 </table>
+
+
  </div>
+
 </template>
 
 
@@ -35,16 +44,22 @@ export default {
    
    name: 'comicslist',
 
+
   data: function(){
         return {
               imageUrl:'',
-              comics:[],
               comicsArray:[],
-              comicId:'dfsdfsd',
+              comics:[],
               urlComics:'http://localhost:8080/comics-manager/comics',
               url:'https://jsonplaceholder.typicode.com/users'        
          }
   },
+
+  beforeRouteUpdate(to, from, next) {
+    console.log("beforeROuteUpdate");
+    next() //make sure you always call next()
+  },
+
    created: function(){
           axios.get(this.urlComics)
             .then((response) => {
@@ -53,6 +68,16 @@ export default {
              console.log(this.comics);
             })
       
+     },
+     methods:{
+       goDetails(comId){
+         console.log("GO DETAILS")
+         console.log(this.comId);
+         this.$router.push({name:'detailsComic'});
+       },
+       getDetailsLink:function(){
+         return "/comics-manager/comic/" + this.comicId 
+       }
      }
 }
 </script>

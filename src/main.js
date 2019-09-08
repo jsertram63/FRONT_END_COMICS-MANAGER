@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import addCategory from './components/addCategory';
 import addComic from './components/addComic';
 import comicslist from './components/comicslist';
-//import detailsComicComponent from './components/detailsComicComponent';
+import Details from './components/Details';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -15,10 +15,27 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 Vue.use(VueRouter, VueAxios, axios, BootstrapVue);
 
 const routes = [
-  {path:'/comics-manager/add-category',name: 'category', component:addCategory},
+  {
+    path:'/comics-manager/add-category',
+    name: 'category',
+   component:addCategory
+  },
+
+
   {path:'/comics-manager/add-comic',name: 'comic', component:addComic},
-  {path:'/comics-manager/comics',name: 'comics', component:comicslist},
-  {path:'/',name: 'comics', component:comicslist}
+  {path:'/comics-manager/comics',name: 'comics', component:comicslist
+  
+  
+  ,children:[{
+    path:'/comics-manager/comic/:id',
+    name:'detailsComic',
+    props: true,
+    component:detailsComicComponent
+  }]
+  },
+
+  {path:'/comics-manager/comic/:comicId',name:'details',Details},
+ // {path:'/',name: 'comics', component:comicslist}
 ]
 
 const router = new VueRouter({
