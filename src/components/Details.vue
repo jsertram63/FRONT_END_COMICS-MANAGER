@@ -1,5 +1,13 @@
-<template v-if="details">
-    <h1> DETAILS</h1>
+<template>
+    <div>
+      <h1> {{comic['title']}} </h1>
+    <h2> {{comic['description']}}</h2>
+    </div>
+    
+
+    
+
+
 </template>
 
 
@@ -8,26 +16,30 @@
 import axios from 'axios'
 export default {
     name: 'details',
+    
 
 
      data: function(){
              return {
-                url:'http://localhost:8080/comics-manager/comic/',
+              
                 comic:'',
                 urlComic:'',
-                id:''
+                id:'',
+                props:['id']
          }
      },
      created: function(){
-       /*  this.id = this.$route.params.id;
+        this.id = this.$route.params.id;
+        console.log('In details created');
          console.log(this.id);
-         urlComic = url + this.$props.id;
-     axios.get(this.urlComic)
+        // urlComic = url + this.$props.id;
+        const url  = 'http://localhost:8080/comics-manager/comic/' + this.id
+     axios.get(url)
             .then((response) => {
-            this.comic = response.data
-              
-              console.log(this.comic);    
-            })*/
+              //  console.log(response.data);
+                this.comic = response.data.comic;
+                console.log(this.comic);
+            })
       },
 }
 </script>

@@ -20,8 +20,9 @@
               <!-- <button v-on:click="goDetails(com.id)"> Details </button> 
               <h6 @click="goDetails()"> Details </h6> !-->
            
-                <router-link  :to="{name:'details', params: {comicId:com.id}} " tag="button">Details</router-link>    
-                <router-view></router-view>
+                <router-link  :to="{name:'details', params: {id:com._id}} " tag="button">Details</router-link>    
+              <!--  <router-view></router-view> -->
+             
              </div>
              
       </td>
@@ -60,7 +61,11 @@ export default {
     next() //make sure you always call next()
   },
 
+
+
+
    created: function(){
+     console.log("on created");
           axios.get(this.urlComics)
             .then((response) => {
               this.comics = response.data;  
