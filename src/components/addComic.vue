@@ -21,9 +21,9 @@
    </textarea>
 
 
-   <label>ImageUrl</label>
-            <input type="text" name="email" size="20" 
-   maxlength="40" value="email" id="email" v-model="imageUrl"/>
+   <label>Image</label>
+            
+   <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
 </fieldset>
 
  
@@ -50,6 +50,7 @@ export default {
                 imageUrl:'',
                 sagaTab:[],
                 sagaTab2:[],
+                file:'',
                 
 
                 url:'http://localhost:8080/comics-manager/comic/',
@@ -82,23 +83,52 @@ export default {
   },
      
      methods: {
-         formSubmit(e){
-             console.error("Log an error level message.");
-             axios.post(this.url, {
-                 title:this.nameHeroe,
-                 description:this.description,
-                 imageUrl:this.imageUrl,
-                 categoryId:this.selected
-                 
-             })
-             .then(function(response) {
-                console.log((response));
-                 
-             })
-            .catch(function(err) {
-             console.log(err);
-            });
+         formSubmit: function(e){
 
+                //title:this.nameHeroe,
+                 //description:this.description,
+                 //imageUrl:this.imageUrl,
+                // categoryId:this.selected
+            
+
+              let formData = new FormData();
+              var options = { content: formData };
+
+            /*
+                Add the form data we need to submit
+            */
+            //formData.append('file', this.file);
+            formData.append('title', this.nameHeroe);
+            formData.append('description',this.description);
+            formData.append('file', this.file);
+            formData.append('categoryId',this.selected);
+            console.log('formData');
+            console.log(formData);
+            console.log(this.file);
+            console.log('nameHeroe');
+            console.log(this.selected);
+         
+           
+
+             console.error("Log an error level message.");
+                 axios.post( this.url,
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }
+            ).then(function(){
+          console.log('SUCCESS!!');
+        })
+        .catch(function(){
+          console.log('FAILURE!!');
+        });
+      },
+
+         handleFileUpload(){
+             this.file = this.$refs.file.files[0];
+             console.log(this.file);
          },
          changeSelect(){
              console.log("CHANGE SELECT");

@@ -1,7 +1,12 @@
 <template>
     <div>
+      <h3> {{categ['name']}}</h3>
       <h1> {{comic['title']}} </h1>
     <h2> {{comic['description']}}</h2>
+   
+
+   
+
     </div>
     
 
@@ -21,8 +26,9 @@ export default {
 
      data: function(){
              return {
-              
+                
                 comic:'',
+                categ:'',
                 urlComic:'',
                 id:'',
                 props:['id']
@@ -30,7 +36,7 @@ export default {
      },
      created: function(){
         this.id = this.$route.params.id;
-        console.log('In details created');
+
          console.log(this.id);
         // urlComic = url + this.$props.id;
         const url  = 'http://localhost:8080/comics-manager/comic/' + this.id
@@ -38,7 +44,11 @@ export default {
             .then((response) => {
               //  console.log(response.data);
                 this.comic = response.data.comic;
-                console.log(this.comic);
+                 console.log('categories');
+                this.categ = this.comic.category;
+                //console.log(this.comic);
+               
+                console.log(this.categ);
             })
       },
 }
