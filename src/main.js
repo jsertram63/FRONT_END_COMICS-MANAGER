@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import addCategory from './components/addCategory';
 import addComic from './components/addComic';
 import comicslist from './components/comicslist';
-import Details from './components/Details';
+import detailsComic from './components/Details';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import 'bootstrap/dist/css/bootstrap.css';
