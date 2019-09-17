@@ -23,11 +23,12 @@
 
    <label>Image</label>
             
-   <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+   <input type="file" id="file" name="file" ref="file" @change="onFileSelected"/>
 </fieldset>
 
  
- <button class="btn" type="submit"> AJouter</button>
+ <button class="btn"> AJouter</button>
+ <button v-on:click="submitFile()">Submit</button>
 
       </form>
  
@@ -38,6 +39,7 @@
    
 <script>
 import axios from 'axios'
+
 
 export default {
    name: 'addCategory',
@@ -51,9 +53,10 @@ export default {
                 sagaTab:[],
                 sagaTab2:[],
                 file:'',
+                selectedFile:null,
                 
 
-                url:'http://localhost:8080/comics-manager/comic/',
+                url:'http://localhost:8080/comics-manager/comic',
                 urlCategories:'http://localhost:8080/comics-manager/categories'
                     
          }
@@ -85,50 +88,69 @@ export default {
      methods: {
          formSubmit: function(e){
 
-                //title:this.nameHeroe,
-                 //description:this.description,
-                 //imageUrl:this.imageUrl,
-                // categoryId:this.selected
-            
-
-              let formData = new FormData();
-              var options = { content: formData };
-
-            /*
-                Add the form data we need to submit
-            */
-            //formData.append('file', this.file);
-            formData.append('title', this.nameHeroe);
-            formData.append('description',this.description);
-            formData.append('file', this.file);
-            formData.append('categoryId',this.selected);
-            console.log('formData');
-            console.log(formData);
-            console.log(this.file);
-            console.log('nameHeroe');
-            console.log(this.selected);
+            let formData = new FormData();
+             var options = { content: formData };
          
-           
+          
 
-             console.error("Log an error level message.");
-                 axios.post( this.url,
-                formData,
-                {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              }
-            ).then(function(){
-          console.log('SUCCESS!!');
-        })
-        .catch(function(){
-          console.log('FAILURE!!');
-        });
+
+
+         let data = {
+             title: this.heroe,
+             description: this.description,
+             categoryId: this.selected
+         }
+         //formData.append('body',data);
+         formData.append('title',this.nameHeroe);
+         formData.append('description',this.description);
+         formData.append('categoryId',this.selected);
+           formData.append('file', this.selectedFile);   
+
+
+          let CancelToken = axios.CancelToken;
+          let source = CancelToken.source();
+           let current = this;
+          let cancelToken = source.token;
+
+            let config = {
+                cancelToken: source.token,
+                timeout: 5000,
+                 header : {
+                    'Content-Type' : 'multipart/form-data',
+                    
+                 }
+            }
+       
+             axios.post( this.url,formData,config,{
+                 onUploadProgress: uploadEvent => {
+                     console.log('upload Progress:' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%') 
+                 }
+             })
+              //   .then(function(){
+              //      console.log('SUCCESS!!');
+              .then((response) => {
+                  console.log('SUCCESS!!');
+                    console.log(response.data);
+                     console.log(response.status);
+                    console.log(response.statusText);
+                    console.log(response.headers);
+                    console.log(response.config);
+
+
+            })
+                .catch(function(){
+                console.log('FAILURE!!');
+            });
+
+
+
       },
 
-         handleFileUpload(){
-             this.file = this.$refs.file.files[0];
-             console.log(this.file);
+      
+         onFileSelected(event){
+             this.selectedFile = event.target.files[0];
+             console.log("EVENT");
+             console.log(event.target.files[0]);
          },
          changeSelect(){
              console.log("CHANGE SELECT");

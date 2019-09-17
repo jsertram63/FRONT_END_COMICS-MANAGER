@@ -2,6 +2,10 @@
     <div>
       <h3> {{categ['name']}}</h3>
       <h1> {{comic['title']}} </h1>
+      
+       <img v-bind:src="urlImage" height="500" width="420"> </img>
+      
+      
     <h2> {{comic['description']}}</h2>
    
 
@@ -31,7 +35,8 @@ export default {
                 categ:'',
                 urlComic:'',
                 id:'',
-                props:['id']
+                props:['id'],
+                urlImage:''
          }
      },
      created: function(){
@@ -48,7 +53,9 @@ export default {
                 this.categ = this.comic.category;
                 //console.log(this.comic);
                
-                console.log(this.categ);
+                console.log(this.comic.imageUrl);
+                this.urlImage = 'http://localhost:8080/' + this.comic.imageUrl;
+                console.log(this.urlImage);
             })
       },
 }
