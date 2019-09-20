@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-      <NavBar>
+      <NavBar   @authenticated="setAuthenticated()">
     </NavBar>
     
   </div>
@@ -15,6 +15,13 @@ export default {
   name: 'app',
   components: {
     NavBar
+  },
+  data: function(){
+    authenticated: false;
+  },methods: {
+     setDetails(){
+       this.authenticated = true ;
+     }
   }
 }
 </script>
